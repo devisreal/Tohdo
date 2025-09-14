@@ -1,0 +1,35 @@
+{
+  "name": "node-ts-starter",
+  "version": "1.0.0",
+  "description": "Node Typescript Starter!",
+  "type": "module",
+  "scripts": {
+    "prebuild": "pnpm exec rimraf dist",
+    "build": "pnpm exec tsc && tsc-alias",
+    "prestart": "npm run build",
+    "start": "pnpm exec tsx src/server.ts",
+    "dev": "pnpm exec tsx watch src/server.ts",
+    "lint": "pnpm exec eslint src/**/*.ts",
+    "format": "pnpm exec prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "@types/cors": "^2.8.17",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.0",
+    "eslint": "^9.25.1",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "tsc-alias": "^1.8.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.31.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  }
+}
