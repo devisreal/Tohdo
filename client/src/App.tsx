@@ -1,20 +1,20 @@
-import { Button } from "@/components/ui/button";
+import Navbar from "@/components/navbar";
+import { ThemeProvider } from "@/components/theme-provider";
+import { AppRoutes } from "@/routes";
+import "@/styles/App.css";
+import { BrowserRouter as Router } from "react-router-dom";
 
-import "./styles/App.css";
-
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="p-10">
-      <h1>
-        Vite react template with{" "}
-        <span className="typescript font-mono">TypeScript</span>
-      </h1>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <Button variant="secondary" className="border shadow-sm">
-        Hello
-      </Button>
-    </div>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <div className="px-10 h-[100vh] mt-28">
+        <Router>
+          <Navbar />
+          <AppRoutes />
+        </Router>
+      </div>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
