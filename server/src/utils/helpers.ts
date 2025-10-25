@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { and, eq as equals } from "drizzle-orm";
+import { eq as equals, or } from "drizzle-orm";
 import { users } from "@/db/schema";
 
 export async function checkExistingUser(
@@ -10,7 +10,7 @@ export async function checkExistingUser(
     const result = await db
       .select()
       .from(users)
-      .where(and(equals(users.username, username), equals(users.email, email)))
+      .where(or(equals(users.username, username), equals(users.email, email)))
       .limit(1);
     return result.length > 0;
   } catch (error) {
