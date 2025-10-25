@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
 import { errorHandler } from "@/middlewares/errorHandler";
+import { db } from "./db";
 
 const app = express();
 
@@ -13,7 +14,8 @@ app.use(
 );
 
 app.get("/", async (_req: Request, res: Response) => {
-  res.send("Hello ts starter");
+  const result = await db.execute('select 1');
+  res.send(result);
 });
 
 app.use(errorHandler);
