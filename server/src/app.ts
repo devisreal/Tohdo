@@ -1,10 +1,10 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, Express } from "express";
 import cors from "cors";
 import "dotenv/config";
 import { errorHandler } from "@/middlewares/errorHandler";
-import { db } from "./db";
+import authRoutes from "@/routes/auth.routes";
 
-const app = express();
+const app: Express = express();
 
 app.use(express.json());
 app.use(
@@ -14,9 +14,13 @@ app.use(
 );
 
 app.get("/", async (_req: Request, res: Response) => {
-  const result = await db.execute('select 1');
-  res.send(result);
+  res.send("Welcome Tohdo");
 });
+
+// * routes
+app.use("/auth", authRoutes);
+
+// * middleware
 
 app.use(errorHandler);
 

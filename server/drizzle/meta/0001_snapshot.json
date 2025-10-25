@@ -1,6 +1,6 @@
 {
-  "id": "312c7521-d6e6-4b78-beba-929d242bc6c9",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "c21c256f-c187-4384-8c71-35fe01a823c5",
+  "prevId": "312c7521-d6e6-4b78-beba-929d242bc6c9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -66,7 +66,7 @@
           "name": "updated_at",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "deleted_at": {
           "name": "deleted_at",

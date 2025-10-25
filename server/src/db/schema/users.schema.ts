@@ -8,7 +8,7 @@ export const users = t.pgTable(
     username: t.varchar("username", { length: 255 }).notNull().unique(),
     firstname: t.varchar("firstname", { length: 255 }),
     lastname: t.varchar("lastname", { length: 255 }),
-    email: t.varchar({ length: 255 }).notNull().unique(),
+    email: t.varchar("email", { length: 255 }).notNull().unique(),
     password: t.varchar("password", { length: 255 }).notNull(),
     ...timestamps,
   },
