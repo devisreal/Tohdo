@@ -6,3 +6,8 @@ export type JwtPayload = {
   iat?: number;
   exp?: number;
 };
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
