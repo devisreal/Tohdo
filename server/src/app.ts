@@ -3,6 +3,8 @@ import cors from "cors";
 import "dotenv/config";
 import { errorHandler } from "@/middlewares/errorHandler";
 import authRoutes from "@/routes/auth.routes";
+import tohdoRoutes from "@/routes/tohdo.routes";
+import groupsRoutes from "@/routes/groups.routes";
 import cookieParser from "cookie-parser";
 
 const app: Express = express();
@@ -22,6 +24,8 @@ app.get("/", async (_req: Request, res: Response) => {
 
 // * routes
 app.use("/auth", authRoutes);
+app.use("/tohdo", tohdoRoutes);
+app.use("/groups", groupsRoutes);
 
 // * middleware
 
