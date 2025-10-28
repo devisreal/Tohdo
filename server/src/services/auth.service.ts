@@ -33,6 +33,7 @@ export const registerUserService = async (
       password: hashedPassword,
     })
     .returning();
+
   if (!user) {
     throw new Error("User insert failed");
   }

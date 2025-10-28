@@ -12,7 +12,6 @@ const authMiddleware: RequestHandler = (
   next: NextFunction,
 ) => {
   let token: string | undefined = req.cookies?.access_token;
-  console.log(token);
 
   if (!token && req.headers.authorization?.startsWith("Bearer ")) {
     token = req.headers.authorization.split(" ")[1];
