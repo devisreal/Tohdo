@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { tohdoGroups } from "@/db/schema";
 import { TohdoGroup } from "@/types/groups";
 import { NewTohdo } from "@/types/tohdo";
-import { eq as equals } from "drizzle-orm";
+import { and, eq as equals } from "drizzle-orm";
 
 export const getUserGroupsService = async (
   userId: number,
@@ -31,8 +31,43 @@ export const createGroupService = async (
   return group;
 };
 
-export const updateGroupService = async (groupId: string, data: any) => {
-  // DB logic to update group
+export const updateGroupService = async (
+  userId: number,
+  groupId: number,
+  data: { name: string },
+): Promise<TohdoGroup> => {
+  // * First alternative: Check if the group exist and belongs to the logged in user before updating
+  /** 
+    const group = await db.query.tohdoGroups.findFirst({
+      where: and(
+        equals(tohdoGroups.id, groupId),
+        equals(tohdoGroups.userId, userId),
+      ),
+    });
+
+    if (!group) throw new Error("Group not found or not yours");
+
+    await db
+      .update(tohdoGroups)
+      .set({ groupName: data.name })
+      .where(equals(tohdoGroups.id, groupId));
+
+    */
+
+  // * Second alternative, do it all in one query
+  const [updatedGroup] = await db
+    .update(tohdoGroups)
+    .set({ groupName: data.name })
+    .where(
+      and(equals(tohdoGroups.id, groupId), equals(tohdoGroups.userId, userId)),
+    )
+    .returning();
+
+  if (!updatedGroup) {
+    throw new Error("Group not found or unauthorized");
+  }
+
+  return updatedGroup;
 };
 
 export const deleteGroupService = async (groupId: string) => {

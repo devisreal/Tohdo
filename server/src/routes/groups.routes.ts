@@ -16,7 +16,7 @@ router.get("/", authMiddleware, getUserGroupsController);
 router.post("/", authMiddleware, createGroupController);
 
 // * Edit Group details
-router.put("/", updateGroupController);
+router.put("/:groupId", authMiddleware, updateGroupController);
 
 // * Delete Group
 router.delete("/", deleteGroupContoller);
