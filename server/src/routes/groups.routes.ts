@@ -13,7 +13,7 @@ const router: Router = Router();
 router.get("/", authMiddleware, getUserGroupsController);
 
 // * Create New Group
-router.post("/", createGroupController);
+router.post("/", authMiddleware, createGroupController);
 
 // * Edit Group details
 router.put("/", updateGroupController);
