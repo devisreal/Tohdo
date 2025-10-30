@@ -24,7 +24,7 @@ app.get("/", async (_req: Request, res: Response) => {
 
 // * routes
 app.use("/auth", authRoutes);
-app.use("/tohdo", tohdoRoutes);
+app.use("/tohdos", tohdoRoutes);
 app.use("/groups", groupsRoutes);
 
 // * middleware
