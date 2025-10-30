@@ -19,7 +19,7 @@ router.post("/", authMiddleware, createGroupController);
 router.put("/:groupId", authMiddleware, updateGroupController);
 
 // * Delete Group
-router.delete("/", deleteGroupContoller);
+router.delete("/:groupId", authMiddleware, deleteGroupContoller);
 
 // * Add Tohdo to Group
 // router.post("/");

@@ -70,10 +70,29 @@ export const updateGroupService = async (
   return updatedGroup;
 };
 
-export const deleteGroupService = async (groupId: string) => {
-  // DB logic to delete group
+export const deleteGroupService = async (
+  groupId: number,
+  userId: number,
+): Promise<TohdoGroup> => {
+  const group = await db.query.tohdoGroups.findFirst({
+    where: and(
+      equals(tohdoGroups.id, groupId),
+      equals(tohdoGroups.userId, userId),
+    ),
+  });
+
+  if (!group) throw new Error("Group not found or not yours");
+
+  const [deletedGroup] = await db
+    .delete(tohdoGroups)
+    .where(
+      and(equals(tohdoGroups.id, groupId), equals(tohdoGroups.userId, userId)),
+    )
+    .returning();
+
+  return deletedGroup;
 };
 
-export const addTodoToGroupService = async (groupId: string, data: any) => {
+export const addTodoToGroupService = async (groupId: number, data: any) => {
   // DB logic to add todo to group
 };

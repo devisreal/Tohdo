@@ -1,5 +1,6 @@
 import {
   createGroupService,
+  deleteGroupService,
   getUserGroupsService,
   updateGroupService,
 } from "@/services/groups.service";
@@ -66,7 +67,7 @@ export const updateGroupController: RequestHandler = async (
 
     const group = await updateGroupService(Number(user.sub), groupId, data);
 
-    res.status(201).json({
+    res.status(200).json({
       status: ResponseStatus.Success,
       message: `Updated group name to '${group.groupName}'!`,
       group,
@@ -85,6 +86,25 @@ export const updateGroupController: RequestHandler = async (
 export const deleteGroupContoller: RequestHandler = async (
   req: Request,
   res: Response,
-) => {
-  res.send("Delete Group");
+): Promise<void> => {
+  try {
+    const user: JwtPayload = req.user;
+    const groupId = Number(req.params.groupId);
+
+    const deletedGroup = await deleteGroupService(groupId, Number(user.sub));
+
+    res.status(204).json({
+      status: ResponseStatus.Success,
+      message: `Deleted group '${deletedGroup.groupName}'!`,
+      deletedGroup,
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res
+        .status(400)
+        .json({ status: ResponseStatus.Error, message: error.message, error });
+    } else {
+      res.status(400).json({ message: "An unknown error occurred" });
+    }
+  }
 };
