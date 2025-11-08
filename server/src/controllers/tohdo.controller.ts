@@ -1,6 +1,11 @@
 import { RequestHandler, Response, Request } from "express";
 import { ResponseStatus } from "@/types/response";
-import { getUserTohdosService } from "@/services/tohdo.service";
+import {
+  createTohdoService,
+  getUserTohdosService,
+} from "@/services/tohdo.service";
+import { NewTohdo, tohdoInsertSchema } from "@/types/tohdo";
+import { handleZodError } from "@/utils/handleZodError";
 
 export const getUserTohdosController: RequestHandler = async (
   req: Request,
@@ -28,24 +33,30 @@ export const createTohdoController: RequestHandler = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  //   try {
-  //     const { name } = req.body;
-  //     const data: NewTohdo = { userId: req.user.sub, title: name };
-  //     const group = await createGroupService(data);
-  //     res.status(201).json({
-  //       status: ResponseStatus.Success,
-  //       message: `Group '${group.groupName}' created successfully`,
-  //       group,
-  //     });
-  //   } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //       res
-  //         .status(400)
-  //         .json({ status: ResponseStatus.Error, message: error.message });
-  //     } else {
-  //       res.status(400).json({ message: "An unknown error occurred" });
-  //     }
-  //   }
+  try {
+    const userId = Number(req.user.sub);
+    const formValues: NewTohdo = { userId, ...req.body };
+    const parsedValues = tohdoInsertSchema.parse(formValues);
+    const group = await createTohdoService(parsedValues);
+    res.status(201).json({
+      status: ResponseStatus.Success,
+      message: "Tohdo created successfully",
+      group,
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.name === "ZodError") {
+        return handleZodError(error, res);
+      }
+
+      res.status(400).json({
+        status: ResponseStatus.Error,
+        message: error.message,
+      });
+    } else {
+      res.status(400).json({ message: "An unknown error occurred" });
+    }
+  }
 };
 
 export const updateTohdoController: RequestHandler = async (

@@ -14,17 +14,18 @@ export const getUserTohdosService = async (
 };
 
 export const createTohdoService = async (values: NewTohdo): Promise<Tohdo> => {
-  //   const [group] = await db
-  //     .insert(tohdoGroups)
-  //     .values({
-  //       groupName: values.title,
-  //       userId: values.userId,
-  //     })
-  //     .returning();
-  //   if (!group) {
-  //     throw new Error("Failed to add group");
-  //   }
-  //   return group;
+  const [group] = await db
+    .insert(tohdos)
+    .values({
+      title: values.title,
+      groupId: values.groupId,
+      userId: values.userId,
+    })
+    .returning();
+  if (!group) {
+    throw new Error("Failed to add group");
+  }
+  return group;
 };
 
 export const updateTohdoService = async (
