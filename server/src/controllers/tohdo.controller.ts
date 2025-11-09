@@ -2,11 +2,13 @@ import { RequestHandler, Response, Request } from "express";
 import { ResponseStatus } from "@/types/response";
 import {
   createTohdoService,
+  deleteTohdoService,
   getUserTohdosService,
 } from "@/services/tohdo.service";
 import { NewTohdo } from "@/types/tohdo";
 import { handleZodError } from "@/utils/handleZodError";
 import { tohdoInsertSchema } from "@/db/schema";
+import { JwtPayload } from "@/types/auth";
 
 export const getUserTohdosController: RequestHandler = async (
   req: Request,
@@ -89,22 +91,22 @@ export const deleteTohdoContoller: RequestHandler = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  //   try {
-  //     const user: JwtPayload = req.user;
-  //     const groupId = Number(req.params.groupId);
-  //     const deletedGroup = await deleteGroupService(groupId, Number(user.sub));
-  //     res.status(204).json({
-  //       status: ResponseStatus.Success,
-  //       message: `Deleted group '${deletedGroup.groupName}'!`,
-  //       deletedGroup,
-  //     });
-  //   } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //       res
-  //         .status(400)
-  //         .json({ status: ResponseStatus.Error, message: error.message, error });
-  //     } else {
-  //       res.status(400).json({ message: "An unknown error occurred" });
-  //     }
-  //   }
+  try {
+    const user: JwtPayload = req.user;
+    const tohdoId = Number(req.params.tohdoId);
+    const deletedTohdo = await deleteTohdoService(tohdoId, Number(user.sub));
+    res.status(204).json({
+      status: ResponseStatus.Success,
+      message: `Deleted tohdo '${deletedTohdo.title}'!`,
+      deletedGroup: deletedTohdo,
+    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res
+        .status(400)
+        .json({ status: ResponseStatus.Error, message: error.message, error });
+    } else {
+      res.status(400).json({ message: "An unknown error occurred" });
+    }
+  }
 };

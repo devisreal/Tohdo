@@ -1,20 +1,20 @@
 import { NewTohdo, Tohdo } from "@/types/tohdo";
 import { tohdos } from "@/db/schema";
 import { db } from "@/db";
-import { eq as equals } from "drizzle-orm";
+import { and, eq as equals } from "drizzle-orm";
 
 export const getUserTohdosService = async (
   userId: number,
 ): Promise<Tohdo[]> => {
-  const groups = await db
+  const userTohdos = await db
     .select()
     .from(tohdos)
     .where(equals(tohdos.userId, userId));
-  return groups;
+  return userTohdos;
 };
 
 export const createTohdoService = async (values: NewTohdo): Promise<Tohdo> => {
-  const [group] = await db
+  const [tohdo] = await db
     .insert(tohdos)
     .values({
       title: values.title,
@@ -22,10 +22,10 @@ export const createTohdoService = async (values: NewTohdo): Promise<Tohdo> => {
       userId: values.userId,
     })
     .returning();
-  if (!group) {
-    throw new Error("Failed to add group");
+  if (!tohdo) {
+    throw new Error("Failed to add new tohdo");
   }
-  return group;
+  return tohdo;
 };
 
 export const updateTohdoService = async (
@@ -47,21 +47,18 @@ export const updateTohdoService = async (
 };
 
 export const deleteTohdoService = async (
-  groupId: number,
+  tohdoId: number,
   userId: number,
 ): Promise<Tohdo> => {
-  //   const group = await db.query.tohdoGroups.findFirst({
-  //     where: and(
-  //       equals(tohdoGroups.id, groupId),
-  //       equals(tohdoGroups.userId, userId),
-  //     ),
-  //   });
-  //   if (!group) throw new Error("Group not found or not yours");
-  //   const [deletedGroup] = await db
-  //     .delete(tohdoGroups)
-  //     .where(
-  //       and(equals(tohdoGroups.id, groupId), equals(tohdoGroups.userId, userId)),
-  //     )
-  //     .returning();
-  //   return deletedGroup;
+  const tohdo = await db.query.tohdos.findFirst({
+    where: and(equals(tohdos.id, tohdoId), equals(tohdos.userId, userId)),
+  });
+
+  if (!tohdo) throw new Error("Tohdo not found or not yours");
+
+  const [deletedTohdo] = await db
+    .delete(tohdos)
+    .where(and(equals(tohdos.id, tohdoId), equals(tohdos.userId, userId)))
+    .returning();
+  return deletedTohdo;
 };
