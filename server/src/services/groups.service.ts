@@ -1,7 +1,6 @@
 import { db } from "@/db";
 import { tohdoGroups } from "@/db/schema";
-import { TohdoGroup } from "@/types/groups";
-import { NewTohdo } from "@/types/tohdo";
+import { TohdoGroup, NewTohdoGroup } from "@/types/groups";
 import { and, eq as equals } from "drizzle-orm";
 
 export const getUserGroupsService = async (
@@ -15,12 +14,12 @@ export const getUserGroupsService = async (
 };
 
 export const createGroupService = async (
-  values: NewTohdo,
+  values: NewTohdoGroup,
 ): Promise<TohdoGroup> => {
   const [group] = await db
     .insert(tohdoGroups)
     .values({
-      groupName: values.title,
+      groupName: values.groupName,
       userId: values.userId,
     })
     .returning();
@@ -37,7 +36,7 @@ export const updateGroupService = async (
   data: { name: string },
 ): Promise<TohdoGroup> => {
   // * First alternative: Check if the group exist and belongs to the logged in user before updating
-  /** 
+  /**
     const group = await db.query.tohdoGroups.findFirst({
       where: and(
         equals(tohdoGroups.id, groupId),

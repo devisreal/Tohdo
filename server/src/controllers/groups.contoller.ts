@@ -1,3 +1,4 @@
+import { groupInsertSchema } from "@/db/schema";
 import {
   createGroupService,
   deleteGroupService,
@@ -5,8 +6,9 @@ import {
   updateGroupService,
 } from "@/services/groups.service";
 import { JwtPayload } from "@/types/auth";
+import { NewTohdoGroup } from "@/types/groups";
 import { ResponseStatus } from "@/types/response";
-import { NewTohdo } from "@/types/tohdo";
+import { handleZodError } from "@/utils/handleZodError";
 import { Request, RequestHandler, Response } from "express";
 
 export const getUserGroupsController: RequestHandler = async (
@@ -36,17 +38,23 @@ export const createGroupController: RequestHandler = async (
   res: Response,
 ): Promise<void> => {
   try {
+    const userId = Number(req.user.sub);
     const { name } = req.body;
-    const data: NewTohdo = { userId: req.user.sub, title: name };
-
+    const data: NewTohdoGroup = { userId, groupName: name };
+    const parsedValues = groupInsertSchema.parse(data);
     const group = await createGroupService(data);
     res.status(201).json({
       status: ResponseStatus.Success,
       message: `Group '${group.groupName}' created successfully`,
       group,
     });
+    res.json(parsedValues);
   } catch (error: unknown) {
     if (error instanceof Error) {
+      if (error.name === "ZodError") {
+        return handleZodError(error, res);
+      }
+
       res
         .status(400)
         .json({ status: ResponseStatus.Error, message: error.message });

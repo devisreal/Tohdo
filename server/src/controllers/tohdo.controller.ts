@@ -4,8 +4,9 @@ import {
   createTohdoService,
   getUserTohdosService,
 } from "@/services/tohdo.service";
-import { NewTohdo, tohdoInsertSchema } from "@/types/tohdo";
+import { NewTohdo } from "@/types/tohdo";
 import { handleZodError } from "@/utils/handleZodError";
+import { tohdoInsertSchema } from "@/db/schema";
 
 export const getUserTohdosController: RequestHandler = async (
   req: Request,

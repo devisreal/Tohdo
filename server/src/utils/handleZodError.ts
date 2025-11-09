@@ -1,6 +1,5 @@
 import { ResponseStatus } from "@/types/response";
 import { Response } from "express";
-// adjust import path if needed
 
 export const handleZodError = (error: Error, res: Response) => {
   try {
