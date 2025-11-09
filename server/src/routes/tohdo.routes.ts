@@ -5,7 +5,6 @@ import {
   deleteTohdoContoller,
   getUserTohdosController,
   updateTohdoController,
-  updateTohdoControllerPatch,
 } from "@/controllers/tohdo.controller";
 const router: Router = Router();
 

@@ -28,7 +28,9 @@ export const createTohdoService = async (values: NewTohdo): Promise<Tohdo> => {
   return tohdo;
 };
 
-export const updateTohdoService = async (values: UpdateTohdo & { userId: number, tohdoId: number }): Promise<Tohdo> => {
+export const updateTohdoService = async (
+  values: UpdateTohdo & { userId: number; tohdoId: number },
+): Promise<Tohdo> => {
   const [updatedTohdo] = await db
     .update(tohdos)
     .set({
