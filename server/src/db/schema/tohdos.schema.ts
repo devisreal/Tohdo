@@ -34,7 +34,7 @@ export const tohdoInsertSchema = createInsertSchema(tohdos, {
     .min(1, { message: "Title cannot be empty" })
     .min(3, { message: "Title must be at least 3 characters long" }),
 
-  completed: z.boolean("Completed must be true or false").default(false),
+  completed: z.boolean("Completed must be either true or false").default(false),
 
   groupId: z
     .number("Group ID must be a number")
@@ -45,3 +45,7 @@ export const tohdoInsertSchema = createInsertSchema(tohdos, {
     .date("Invalid date format for created_at")
     .default(() => new Date()),
 });
+
+export const tohdoUpdateSchema = tohdoInsertSchema
+  .partial()
+  .omit({ created_at: true, userId: true });

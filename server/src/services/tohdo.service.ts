@@ -1,4 +1,4 @@
-import { NewTohdo, Tohdo } from "@/types/tohdo";
+import { NewTohdo, Tohdo, UpdateTohdo } from "@/types/tohdo";
 import { tohdos } from "@/db/schema";
 import { db } from "@/db";
 import { and, eq as equals } from "drizzle-orm";
@@ -28,22 +28,27 @@ export const createTohdoService = async (values: NewTohdo): Promise<Tohdo> => {
   return tohdo;
 };
 
-export const updateTohdoService = async (
-  userId: number,
-  groupId: number,
-  data: { name: string },
-): Promise<Tohdo> => {
-  //   const [updatedGroup] = await db
-  //     .update(tohdoGroups)
-  //     .set({ groupName: data.name })
-  //     .where(
-  //       and(equals(tohdoGroups.id, groupId), equals(tohdoGroups.userId, userId)),
-  //     )
-  //     .returning();
-  //   if (!updatedGroup) {
-  //     throw new Error("Group not found or unauthorized");
-  //   }
-  //   return updatedGroup;
+export const updateTohdoService = async (values: UpdateTohdo & { userId: number, tohdoId: number }): Promise<Tohdo> => {
+  const [updatedTohdo] = await db
+    .update(tohdos)
+    .set({
+      title: values.title,
+      completed: values.completed,
+      groupId: values.groupId,
+      updated_at: new Date(),
+    })
+    .where(
+      and(
+        equals(tohdos.id, values.tohdoId),
+        equals(tohdos.userId, values.userId),
+      ),
+    )
+    .returning();
+
+  if (!updatedTohdo) {
+    throw new Error("Tohdo not found or unauthorized");
+  }
+  return updatedTohdo;
 };
 
 export const deleteTohdoService = async (

@@ -5,6 +5,7 @@ import {
   deleteTohdoContoller,
   getUserTohdosController,
   updateTohdoController,
+  updateTohdoControllerPatch,
 } from "@/controllers/tohdo.controller";
 const router: Router = Router();
 
@@ -16,6 +17,9 @@ router.post("/", authMiddleware, createTohdoController);
 
 // * Edit Tohdo details
 router.put("/:tohdoId", authMiddleware, updateTohdoController);
+
+// * Edit Tohdo details partially
+// router.patch("/:tohdoId", authMiddleware, updateTohdoControllerPatch);
 
 // * Delete Tohdo
 router.delete("/:tohdoId", authMiddleware, deleteTohdoContoller);
