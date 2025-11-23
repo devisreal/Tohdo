@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import {
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { FileTextIcon, HomeIcon, LayersIcon } from "lucide-react";
+import { motion } from "motion/react";
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 
@@ -23,12 +23,24 @@ const navigationLinks = [
   { href: "/archive", label: "Archive", icon: FileTextIcon },
 ];
 
+// Track if animation has played in this session (resets on page reload)
+let hasAnimated = false;
+
 const Navbar: React.FC = () => {
+  React.useEffect(() => {
+    hasAnimated = true;
+  }, []);
+
   return (
-    <nav className="border shadow px-4 md:px-6 bg-gray-100/30 backdrop-blur-md dark:bg-muted rounded-full mx-auto fixed w-5/12 top-4 ">
-      <div className="flex h-16 items-center justify-between gap-4">
-        {/* Left side */}
-        <div className="flex flex-1 items-center gap-2">
+    <motion.nav
+      initial={!hasAnimated ? { y: -40, opacity: 0 } : { y: 0, opacity: 1 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-2xl rounded-full border border-white/20 bg-white/70 px-6 shadow-lg shadow-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-black/60 dark:shadow-black/20"
+    >
+      <div className="flex h-14 items-center justify-between">
+        {/* Left side - Logo & Mobile Menu */}
+        <div className="flex items-center gap-4">
           {/* Mobile menu trigger */}
           <Popover>
             <PopoverTrigger asChild>
@@ -64,79 +76,93 @@ const Navbar: React.FC = () => {
                 </svg>
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
-              <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => {
-                    const Icon = link.icon;
-                    return (
-                      <NavigationMenuItem key={index} className="w-full">
-                        <NavigationMenuLink
-                          href={link.href}
-                          className="flex-row items-center gap-2 py-1.5"
-                          // active={link.active}
-                        >
-                          <Icon
-                            size={16}
-                            className="text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                          <span>{link.label}</span>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    );
-                  })}
-                </NavigationMenuList>
-              </NavigationMenu>
-            </PopoverContent>
-          </Popover>
-          <div className="flex items-center gap-6">
-            {/* Logo */}
-            <Link to="/" className="text-primary hover:text-primary/90">
-              <Logo />
-            </Link>
-
-            {/* Navigation menu */}
-            <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
+            <PopoverContent align="start" className="w-48 p-2 md:hidden">
+              <div className="flex flex-col gap-1">
+                {navigationLinks.map((link, index) => {
+                  const Icon = link.icon;
+                  return (
                     <NavLink
+                      key={index}
                       to={link.href}
-                      // className="py-1.5 font-medium text-muted-foreground hover:text-primary"
                       className={({ isActive }) =>
                         cn(
-                          "flex font-medium flex-col gap-1 rounded-md p-2 text-sm transition-all outline-none hover:bg-accent focus:bg-accent focus:text-accent-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 data-[active]:bg-accent data-[active]:text-accent-foreground data-[active]:hover:bg-accent data-[active]:focus:bg-accent [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground",
-                          isActive && "bg-accent",
+                          "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
+                          isActive
+                            ? "bg-accent text-accent-foreground"
+                            : "text-muted-foreground",
                         )
                       }
                     >
+                      <Icon size={16} />
                       {link.label}
                     </NavLink>
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
+                  );
+                })}
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <Logo />
+            <span className="hidden font-bold tracking-tight md:inline-block">
+              Tohdo
+            </span>
+          </Link>
         </div>
-        {/* Right side */}
+
+        {/* Center - Navigation Links (Desktop) */}
+        <NavigationMenu className="hidden md:block">
+          <NavigationMenuList className="gap-1">
+            {navigationLinks.map((link, index) => (
+              <NavigationMenuItem key={index}>
+                <NavLink
+                  to={link.href}
+                  className={({ isActive }) =>
+                    cn(
+                      "relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:text-foreground/80",
+                      isActive
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:bg-accent/50",
+                    )
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {isActive && (
+                        <motion.div
+                          layoutId="navbar-indicator"
+                          className="absolute inset-0 rounded-full bg-accent dark:bg-white/10"
+                          transition={{
+                            type: "spring",
+                            bounce: 0.2,
+                            duration: 0.1,
+                          }}
+                        />
+                      )}
+                      <span className="relative z-10">{link.label}</span>
+                    </>
+                  )}
+                </NavLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        {/* Right side - Auth & Theme */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm" className="text-sm">
+          <div className="hidden items-center gap-2 sm:flex">
+            <Button asChild variant="ghost" size="sm" className="rounded-full">
               <Link to="/auth/sign-in">Sign In</Link>
             </Button>
-            <Button asChild size="sm" className="text-sm">
+            <Button asChild size="sm" className="rounded-full px-4">
               <Link to="/auth/sign-up">Get Started</Link>
             </Button>
           </div>
-          {/* User menu */}
-          {/* <UserMenu /> */}
-
-          {/* Theme toggle */}
           <ThemeToggle />
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

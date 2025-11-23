@@ -1,19 +1,19 @@
-import Navbar from "@/components/navbar";
-import { ThemeProvider } from "@/components/theme-provider";
-import { AppRoutes } from "@/routes";
+import { HomePage } from "@/pages";
+import { LoginPage, RegisterPage } from "@/pages/auth";
 import "@/styles/App.css";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <div className="px-10 h-[100vh] mt-28">
-        <Router>
-          <Navbar />
-          <AppRoutes />
-        </Router>
-      </div>
-    </ThemeProvider>
+    <Routes>
+      <Route>
+        <Route element={<HomePage />} index path="/" />
+        <Route path="/auth">
+          <Route element={<LoginPage />} index path="sign-in/" />
+          <Route element={<RegisterPage />} path="sign-up/" />
+        </Route>
+      </Route>
+    </Routes>
   );
 };
 
