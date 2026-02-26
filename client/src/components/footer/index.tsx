@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="container border-t mx-auto px-4 text-center text-sm text-muted-foreground py-12">
+    <footer className="container border-t mx-auto px-4 text-center text-sm text-muted-foreground py-4 mt-8">
       <p>
         &copy; {new Date().getFullYear()} Tohdo.{" "}
         <span className="text-center mt-4">

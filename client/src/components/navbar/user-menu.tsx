@@ -24,19 +24,14 @@ export default function UserMenu() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
           <Avatar>
-            <AvatarImage
-              src="https://coss.com/origin/avatar.jpg"
-              alt="Profile image"
-            />
+            <AvatarImage src="https://coss.com/origin/avatar.jpg" alt="Profile image" />
             <AvatarFallback>KK</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
-          <span className="truncate text-sm font-medium text-foreground">
-            Keith Kennedy
-          </span>
+          <span className="truncate text-sm font-medium text-foreground">Keith Kennedy</span>
           <span className="truncate text-xs font-normal text-muted-foreground">
             k.kennedy@coss.com
           </span>

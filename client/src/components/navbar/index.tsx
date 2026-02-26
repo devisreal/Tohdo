@@ -6,11 +6,7 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { FileTextIcon, HomeIcon, LayersIcon } from "lucide-react";
 import { motion } from "motion/react";
@@ -36,7 +32,7 @@ const Navbar: React.FC = () => {
       initial={!hasAnimated ? { y: -40, opacity: 0 } : { y: 0, opacity: 1 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-2xl rounded-full border border-white/20 bg-white/70 px-6 shadow-lg shadow-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-black/60 dark:shadow-black/20"
+      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] sm:w-full max-w-xl md:max-w-2xl rounded-full border border-white/20 bg-white/70 px-3 shadow shadow-black/5 backdrop-blur-xl dark:border-white/10 dark:bg-black/60 dark:shadow-black/20"
     >
       <div className="flex h-14 items-center justify-between">
         {/* Left side - Logo & Mobile Menu */}
@@ -45,7 +41,7 @@ const Navbar: React.FC = () => {
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                className="group size-8 md:hidden"
+                className="group size-8 px-4 md:hidden rounded-full"
                 variant="ghost"
                 size="icon"
               >
@@ -87,9 +83,7 @@ const Navbar: React.FC = () => {
                       className={({ isActive }) =>
                         cn(
                           "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
-                          isActive
-                            ? "bg-accent text-accent-foreground"
-                            : "text-muted-foreground",
+                          isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
                         )
                       }
                     >
@@ -99,20 +93,21 @@ const Navbar: React.FC = () => {
                   );
                 })}
               </div>
+              <div className="flex justify-end">
+                <ThemeToggle className="" />
+              </div>
             </PopoverContent>
           </Popover>
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <Logo />
-            <span className="hidden font-bold tracking-tight md:inline-block">
-              Tohdo
-            </span>
+            <span className="hidden font-bold tracking-tight md:inline-block">Tohdo</span>
           </Link>
         </div>
 
         {/* Center - Navigation Links (Desktop) */}
-        <NavigationMenu className="hidden md:block">
+        <NavigationMenu className="hidden sm:block">
           <NavigationMenuList className="gap-1">
             {navigationLinks.map((link, index) => (
               <NavigationMenuItem key={index}>
@@ -120,10 +115,8 @@ const Navbar: React.FC = () => {
                   to={link.href}
                   className={({ isActive }) =>
                     cn(
-                      "relative flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors hover:text-foreground/80",
-                      isActive
-                        ? "text-foreground"
-                        : "text-muted-foreground hover:bg-accent/50",
+                      "relative flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium transition-colors hover:text-foreground/80",
+                      isActive ? "text-foreground" : "text-muted-foreground hover:bg-accent/50",
                     )
                   }
                 >
@@ -132,7 +125,7 @@ const Navbar: React.FC = () => {
                       {isActive && (
                         <motion.div
                           layoutId="navbar-indicator"
-                          className="absolute inset-0 rounded-full bg-accent dark:bg-white/10"
+                          className="absolute inset-0 rounded-full bg-primary/10 dark:bg-white/10"
                           transition={{
                             type: "spring",
                             bounce: 0.2,
@@ -151,15 +144,15 @@ const Navbar: React.FC = () => {
 
         {/* Right side - Auth & Theme */}
         <div className="flex items-center gap-2">
-          <div className="hidden items-center gap-2 sm:flex">
-            <Button asChild variant="ghost" size="sm" className="rounded-full">
+          <ThemeToggle className="hidden md:inline" />
+          <div className="flex items-center gap-2">
+            <Button asChild variant="outline" size="sm" className="rounded-full">
               <Link to="/auth/sign-in">Sign In</Link>
             </Button>
             <Button asChild size="sm" className="rounded-full px-4">
               <Link to="/auth/sign-up">Get Started</Link>
             </Button>
           </div>
-          <ThemeToggle />
         </div>
       </div>
     </motion.nav>

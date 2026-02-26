@@ -4,11 +4,15 @@ import { Toggle } from "@/components/ui/toggle";
 import { useTheme } from "@/hooks/useTheme";
 import { MoonIcon, SunIcon } from "lucide-react";
 
-export default function ThemeToggle() {
+interface ThemeToggleProps {
+  className?: string;
+}
+
+export default function ThemeToggle({ ...props }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div>
+    <div {...props}>
       <Toggle
         variant="outline"
         className="group size-8 rounded-full border-none text-muted-foreground shadow-none data-[state=on]:bg-transparent data-[state=on]:text-muted-foreground data-[state=on]:hover:bg-muted data-[state=on]:hover:text-foreground"

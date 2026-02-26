@@ -1,7 +1,6 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
 
 export default function DefaultLayout({
   children,
@@ -11,11 +10,9 @@ export default function DefaultLayout({
   className?: string;
 }) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-dvh">
       <Navbar />
-      <main className={cn("flex-1 container mx-auto", className)}>
-        {children}
-      </main>
+      <main className={cn("flex-1 p-3 sm:container mx-auto", className)}>{children}</main>
       <Footer />
     </div>
   );

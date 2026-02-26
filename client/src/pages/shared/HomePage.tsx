@@ -32,20 +32,17 @@ const itemVariants = {
 const features = [
   {
     title: "Organize Effortlessly",
-    description:
-      "Keep your tasks structured with our intuitive list and board views.",
+    description: "Keep your tasks structured with our intuitive list and board views.",
     icon: ListTodo,
   },
   {
     title: "Stay Focused",
-    description:
-      "Minimalist design helps you concentrate on what matters most right now.",
+    description: "Minimalist design helps you concentrate on what matters most right now.",
     icon: Zap,
   },
   {
     title: "Track Progress",
-    description:
-      "Visualize your productivity with beautiful charts and insights.",
+    description: "Visualize your productivity with beautiful charts and insights.",
     icon: Layout,
   },
 ];
@@ -74,7 +71,7 @@ const HomePage: React.FC = () => {
 
             <motion.h1
               variants={itemVariants}
-              className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+              className="text-4xl font-bold tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
             >
               Master your day with <br />
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -84,31 +81,19 @@ const HomePage: React.FC = () => {
 
             <motion.p
               variants={itemVariants}
-              className="max-w-2xl text-lg text-muted-foreground sm:text-xl"
+              className="max-w-2xl text-md text-muted-foreground sm:text-lg"
             >
-              The simple, elegant, and powerful to-do list app designed to help
-              you get more done with less stress.
+              The simple, elegant, and powerful to-do list app designed to help you get more done
+              with less stress.
             </motion.p>
 
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col gap-4 sm:flex-row"
-            >
-              <Button
-                asChild
-                size="lg"
-                className="h-12 rounded-full px-8 text-base"
-              >
+            <motion.div variants={itemVariants} className="flex flex-col gap-4 sm:flex-row">
+              <Button asChild size="lg" className="rounded-full">
                 <Link to="/auth/sign-up">
                   Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="h-12 rounded-full px-8 text-base"
-              >
+              <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/auth/sign-in">Sign In</Link>
               </Button>
             </motion.div>
@@ -128,8 +113,8 @@ const HomePage: React.FC = () => {
               Why choose Tohdo?
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground">
-              Built for individuals who want to bring order to chaos without the
-              complexity of enterprise tools.
+              Built for individuals who want to bring order to chaos without the complexity of
+              enterprise tools.
             </p>
           </motion.div>
 
@@ -171,8 +156,8 @@ const HomePage: React.FC = () => {
                 Ready to take control of your tasks?
               </h2>
               <p className="mb-10 text-lg text-primary-foreground/80 sm:text-xl">
-                Join thousands of users who are organizing their life with
-                Tohdo. Start for free today.
+                Join thousands of users who are organizing their life with Tohdo. Start for free
+                today.
               </p>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Button
