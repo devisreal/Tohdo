@@ -10,14 +10,22 @@
     "start": "pnpm exec tsx src/server.ts",
     "dev": "pnpm exec tsx watch src/server.ts",
     "lint": "pnpm exec eslint src/**/*.ts",
-    "format": "pnpm exec prettier --write ."
+    "format": "prettier --write .",
+    "db:push": "pnpm exec drizzle-kit push",
+    "db:generate": "pnpm exec drizzle-kit generate",
+    "db:migrate": "pnpm exec drizzle-kit migrate",
+    "db:seed": "tsx src/db/seeds/index.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.13.0",
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.5",
     "eslint": "^9.25.1",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
@@ -28,8 +36,15 @@
     "typescript-eslint": "^8.31.1"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "drizzle-orm": "^0.44.6",
+    "drizzle-zod": "^0.8.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3",
+    "zod": "^4.1.12"
   }
 }
