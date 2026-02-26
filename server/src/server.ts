@@ -4,7 +4,7 @@ import config from "./config/config.js";
 app.listen(config.port, () => {
   console.log(`
         ╔════════════════════════════════════╗
-        ║ 📡 SERVER IS RUNNING ON PORT: ${config.port} ║
+        ║ 📡 SERVER IS RUNNING ON PORT: ${config.port}  ║
         ╚════════════════════════════════════╝  
   `);
 });
