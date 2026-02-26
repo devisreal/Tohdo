@@ -49,9 +49,9 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
     //   }
     // }
     console.log(formValues);
-    // setTimeout(() => {
-    //   reset();
-    // }, 1000);
+    setTimeout(() => {
+      reset();
+    }, 1000);
   };
 
   return (

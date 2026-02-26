@@ -1,6 +1,18 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -27,7 +39,8 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    // formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm({
     resolver: yupResolver(SignUpFormSchema),
@@ -40,7 +53,12 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     mode: "onBlur",
   });
 
-  const registerUser = async (formValues) => {
+  const registerUser = async (formValues: {
+    username: string;
+    email: string;
+    password: string;
+    confirm_password: string;
+  }) => {
     // try {
     //   await login(formValues);
     //   toast.success("Logged in successfully!");
@@ -56,15 +74,17 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     //   }
     // }
     console.log(formValues);
-    // setTimeout(() => {
-    //   reset();
-    // }, 1000);
+    setTimeout(() => {
+      reset();
+    }, 1000);
   };
 
   return (
     <Card {...props} className="w-full sm:max-w-md p-3 py-4 gap-3">
       <CardHeader className="p-0 xs:p-1 sm:p-3">
-        <CardTitle className="text-base lg:text-lg">Create an account</CardTitle>
+        <CardTitle className="text-base lg:text-lg">
+          Create an account
+        </CardTitle>
         <CardDescription className="text-xs sm:text-sm">
           Enter your information below to create your account
         </CardDescription>
@@ -102,7 +122,12 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               <FieldLabel htmlFor="password" className="text-sm">
                 Password
               </FieldLabel>
-              <Input id="password" type="password" {...register("password")} className="text-sm" />
+              <Input
+                id="password"
+                type="password"
+                {...register("password")}
+                className="text-sm"
+              />
               <FieldDescription className="text-xs">
                 Must be at least 8 characters long.
               </FieldDescription>
@@ -118,7 +143,9 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 {...register("confirm_password")}
                 className="text-sm"
               />
-              <FieldDescription className="text-xs">Please confirm your password.</FieldDescription>
+              <FieldDescription className="text-xs">
+                Please confirm your password.
+              </FieldDescription>
               <FieldError>{errors.confirm_password?.message}</FieldError>
             </Field>
             <FieldGroup>
@@ -127,7 +154,8 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                   Create Account
                 </Button>
                 <FieldDescription className="px-6 text-xs sm:text-sm text-center">
-                  Already have an account? <Link to="/auth/sign-in">Sign in</Link>
+                  Already have an account?{" "}
+                  <Link to="/auth/sign-in">Sign in</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
