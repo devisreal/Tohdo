@@ -1,20 +1,20 @@
-import { Button } from "@/components/ui/button";
+import { LoginPage, RegisterPage } from "@/pages/auth";
+import { HomePage } from "@/pages/shared";
+import "@/styles/App.css";
+import { Route, Routes } from "react-router-dom";
 
-import "./styles/App.css";
-
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="p-10">
-      <h1>
-        Vite react template with{" "}
-        <span className="typescript font-mono">TypeScript</span>
-      </h1>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      <Button variant="secondary" className="border shadow-sm">
-        Hello
-      </Button>
-    </div>
+    <Routes>
+      <Route>
+        <Route element={<HomePage />} index path="/" />
+        <Route path="/auth">
+          <Route element={<LoginPage />} index path="sign-in/" />
+          <Route element={<RegisterPage />} path="sign-up/" />
+        </Route>
+      </Route>
+    </Routes>
   );
-}
+};
 
 export default App;
