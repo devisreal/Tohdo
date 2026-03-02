@@ -16,6 +16,11 @@ type RegisterPromise = {
   token: string;
 };
 
+type LoginPromise = {
+  user: User;
+  token: string;
+};
+
 export const registerUserService = async (
   values: NewUser,
 ): Promise<RegisterPromise> => {
@@ -54,7 +59,7 @@ export const registerUserService = async (
 
 export const loginUserService = async (
   values: LoginPayload,
-): Promise<string> => {
+): Promise<LoginPromise> => {
   const [user] = await db
     .select()
     .from(users)
@@ -75,5 +80,5 @@ export const loginUserService = async (
     expiresIn: "30m",
   });
 
-  return token;
+  return { user, token };
 };

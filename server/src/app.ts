@@ -5,6 +5,7 @@ import { errorHandler } from "@/middlewares/errorHandler";
 import authRoutes from "@/routes/auth.routes";
 import tohdoRoutes from "@/routes/tohdo.routes";
 import groupsRoutes from "@/routes/groups.routes";
+import usersRoutes from "@/routes/users.routes";
 import cookieParser from "cookie-parser";
 
 const app: Express = express();
@@ -26,6 +27,7 @@ app.get("/", async (_req: Request, res: Response) => {
 app.use("/auth", authRoutes);
 app.use("/tohdos", tohdoRoutes);
 app.use("/groups", groupsRoutes);
+app.use("/users", usersRoutes);
 
 // * middleware
 

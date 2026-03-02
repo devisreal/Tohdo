@@ -1,3 +1,4 @@
+import { getApiErrorMessage } from "@/api";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,9 +15,11 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import * as yup from "yup";
 
 export const SignUpFormSchema = yup
@@ -27,20 +30,22 @@ export const SignUpFormSchema = yup
     password: yup
       .string()
       .required("Password is required")
-      .min(6, "Password must be 6 characters or more"),
+      .min(8, "Password must be 8 characters or more"),
     confirm_password: yup
       .string()
-      .oneOf([yup.ref("password"), "null"], "Passwords must match")
+      .oneOf([yup.ref("password")], "Passwords must match")
       .required("This field is required"),
   })
   .required();
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const { register: registerUserAction } = useAuth();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
-    // formState: { errors, isSubmitting },
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm({
     resolver: yupResolver(SignUpFormSchema),
@@ -59,24 +64,23 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     password: string;
     confirm_password: string;
   }) => {
-    // try {
-    //   await login(formValues);
-    //   toast.success("Logged in successfully!");
-    //   reset();
-    //   navigate("/");
-    // } catch (error: unknown) {
-    //   if (axios.isAxiosError(error) && error.response) {
-    //     toast.error(error.response.data.message);
-    //     console.error(error.response.data.message);
-    //   } else {
-    //     toast.error("An unexpected error occurred.");
-    //     console.error(error);
-    //   }
-    // }
-    console.log(formValues);
-    setTimeout(() => {
+    try {
+      await registerUserAction({
+        username: formValues.username,
+        email: formValues.email,
+        password: formValues.password,
+      });
+      toast.success("Account created successfully");
       reset();
-    }, 1000);
+      navigate("/tohdos", { replace: true });
+    } catch (error: unknown) {
+      toast.error(
+        getApiErrorMessage(
+          error,
+          "Unable to create account. Please try again.",
+        ),
+      );
+    }
   };
 
   return (
@@ -151,7 +155,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
             <FieldGroup>
               <Field>
                 <Button type="submit" className="text-sm rounded-full">
-                  Create Account
+                  {isSubmitting ? "Creating account..." : "Create Account"}
                 </Button>
                 <FieldDescription className="px-6 text-xs sm:text-sm text-center">
                   Already have an account?{" "}

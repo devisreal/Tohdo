@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import DefaultLayout from "@/layouts/default";
 import { ArrowRight, CheckCircle2, Layout, ListTodo, Zap } from "lucide-react";
 import { motion } from "motion/react";
@@ -32,22 +33,27 @@ const itemVariants = {
 const features = [
   {
     title: "Organize Effortlessly",
-    description: "Keep your tasks structured with our intuitive list and board views.",
+    description:
+      "Keep your tasks structured with our intuitive list and board views.",
     icon: ListTodo,
   },
   {
     title: "Stay Focused",
-    description: "Minimalist design helps you concentrate on what matters most right now.",
+    description:
+      "Minimalist design helps you concentrate on what matters most right now.",
     icon: Zap,
   },
   {
     title: "Track Progress",
-    description: "Visualize your productivity with beautiful charts and insights.",
+    description:
+      "Visualize your productivity with beautiful charts and insights.",
     icon: Layout,
   },
 ];
 
 const HomePage: React.FC = () => {
+  const { isAuthenticated, user } = useAuth();
+
   return (
     <DefaultLayout>
       <div className="relative overflow-hidden">
@@ -83,25 +89,55 @@ const HomePage: React.FC = () => {
               variants={itemVariants}
               className="max-w-2xl text-md text-muted-foreground sm:text-lg"
             >
-              The simple, elegant, and powerful to-do list app designed to help you get more done
-              with less stress.
+              The simple, elegant, and powerful to-do list app designed to help
+              you get more done with less stress.
             </motion.p>
 
-            <motion.div variants={itemVariants} className="flex flex-col gap-4 sm:flex-row">
-              <Button asChild size="lg" className="rounded-full">
-                <Link to="/auth/sign-up">
-                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="rounded-full">
-                <Link to="/auth/sign-in">Sign In</Link>
-              </Button>
+            <motion.div
+              variants={itemVariants}
+              className="flex flex-col gap-4 sm:flex-row"
+            >
+              {isAuthenticated && user ? (
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="h-12 px-8 rounded-full group text-md font-medium sm:w-auto"
+                >
+                  <Link to="/auth/sign-in">
+                    View my Tohdos{" "}
+                    <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition duration-150" />
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  {" "}
+                  <Button
+                    asChild
+                    size="lg"
+                    className="h-12 px-8 rounded-full group text-md font-medium sm:w-auto"
+                  >
+                    <Link to="/auth/sign-up">
+                      Get Started Free{" "}
+                      <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition duration-150" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="h-12 px-8 rounded-full group text-md font-medium sm:w-auto"
+                  >
+                    <Link to="/auth/sign-in">Sign In</Link>
+                  </Button>
+                </>
+              )}
             </motion.div>
           </motion.div>
         </section>
 
         {/* Features Section */}
-        <section className="container mx-auto px-4 py-24">
+        <section className="container mx-auto px-4 py-24 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -113,8 +149,8 @@ const HomePage: React.FC = () => {
               Why choose Tohdo?
             </h2>
             <p className="mx-auto max-w-2xl text-muted-foreground">
-              Built for individuals who want to bring order to chaos without the complexity of
-              enterprise tools.
+              Built for individuals who want to bring order to chaos without the
+              complexity of enterprise tools.
             </p>
           </motion.div>
 
@@ -123,13 +159,13 @@ const HomePage: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid gap-8 md:grid-cols-3"
+            className="grid gap-6 md:grid-cols-3"
           >
             {features.map((feature, index) => (
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className="group rounded-2xl border bg-card p-8 shadow-sm transition-all hover:shadow-md dark:bg-white/5"
+                className="group rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md dark:bg-white/5"
               >
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                   <feature.icon className="h-6 w-6" />
@@ -142,7 +178,7 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="container mx-auto px-4 py-24">
+        <section className="container mx-auto px-4 py-24 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -156,21 +192,35 @@ const HomePage: React.FC = () => {
                 Ready to take control of your tasks?
               </h2>
               <p className="mb-10 text-lg text-primary-foreground/80 sm:text-xl">
-                Join thousands of users who are organizing their life with Tohdo. Start for free
-                today.
+                Join thousands of users who are organizing their life with
+                Tohdo. Start for free today.
               </p>
               <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Button
-                  asChild
-                  size="lg"
-                  variant="secondary"
-                  className="h-12 w-full rounded-full px-8 text-base font-semibold sm:w-auto"
-                >
-                  <Link to="/auth/sign-up">Start for Free</Link>
-                </Button>
-                <div className="flex items-center gap-2 text-sm text-primary-foreground/80">
-                  <CheckCircle2 className="h-4 w-4" /> No credit card required
-                </div>
+                {isAuthenticated && user ? (
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="secondary"
+                    className="h-12 w-full rounded-full px-8 text-md font-medium sm:w-auto"
+                  >
+                    <Link to="/tohdos">View my Tohdos</Link>
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      asChild
+                      size="lg"
+                      variant="secondary"
+                      className="h-12 w-full rounded-full px-8 text-md font-semibold sm:w-auto"
+                    >
+                      <Link to="/auth/sign-up">Start for Free</Link>
+                    </Button>
+                    <div className="flex items-center gap-2 text-sm text-primary-foreground/80">
+                      <CheckCircle2 className="size-4" /> No credit card
+                      required
+                    </div>{" "}
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

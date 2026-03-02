@@ -1,10 +1,25 @@
+import { getApiErrorMessage } from "@/api";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import * as yup from "yup";
 
 export const LoginFormSchema = yup
@@ -19,6 +34,10 @@ export const LoginFormSchema = yup
   .required();
 
 export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const {
     register,
     handleSubmit,
@@ -34,30 +53,34 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
   });
 
   const loginUser = async (formValues: { email: string; password: string }) => {
-    // try {
-    //   await login(formValues);
-    //   toast.success("Logged in successfully!");
-    //   reset();
-    //   navigate("/");
-    // } catch (error: unknown) {
-    //   if (axios.isAxiosError(error) && error.response) {
-    //     toast.error(error.response.data.message);
-    //     console.error(error.response.data.message);
-    //   } else {
-    //     toast.error("An unexpected error occurred.");
-    //     console.error(error);
-    //   }
-    // }
-    console.log(formValues);
-    setTimeout(() => {
+    type RedirectState = {
+      from?: {
+        pathname?: string;
+      };
+    };
+
+    try {
+      await login(formValues);
+      toast.success("Logged in successfully");
       reset();
-    }, 1000);
+      // If the user was redirected from a protected page, send them back there.
+      // Otherwise use `/tohdos` as the authenticated default destination.
+      const redirectPath =
+        (location.state as RedirectState | null)?.from?.pathname ?? "/tohdos";
+      navigate(redirectPath, { replace: true });
+    } catch (error: unknown) {
+      toast.error(
+        getApiErrorMessage(error, "Unable to login. Please try again."),
+      );
+    }
   };
 
   return (
     <Card {...props} className="w-full sm:max-w-md p-3 py-4 gap-3">
       <CardHeader className="p-0 xs:p-1 sm:p-3">
-        <CardTitle className="text-base lg:text-lg">Login to your account</CardTitle>
+        <CardTitle className="text-base lg:text-lg">
+          Login to your account
+        </CardTitle>
         <CardDescription className="text-xs sm:text-sm">
           Enter your email below to login to your account
         </CardDescription>
@@ -90,7 +113,12 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" {...register("password")} className="text-sm" />
+              <Input
+                id="password"
+                type="password"
+                {...register("password")}
+                className="text-sm"
+              />
               <FieldError>{errors.password?.message}</FieldError>
             </Field>
             <Field>
@@ -98,7 +126,8 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
                 {isSubmitting ? "Logging in..." : "Login"}
               </Button>
               <FieldDescription className="text-center text-xs sm:text-sm">
-                Don&apos;t have an account? <Link to="/auth/sign-up">Sign up</Link>
+                Don&apos;t have an account?{" "}
+                <Link to="/auth/sign-up">Sign up</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

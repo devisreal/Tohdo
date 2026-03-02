@@ -12,7 +12,9 @@ export default function DefaultLayout({
   return (
     <div className="flex flex-col min-h-dvh">
       <Navbar />
-      <main className={cn("flex-1 p-3 sm:container mx-auto", className)}>{children}</main>
+      <main className={cn("flex-1 p-3 sm:container mx-auto", className)}>
+        {children}
+      </main>
       <Footer />
     </div>
   );
