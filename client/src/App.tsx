@@ -1,18 +1,41 @@
 import { LoginPage, RegisterPage } from "@/pages/auth";
-import { HomePage } from "@/pages/shared";
+import {
+  ArchivePage,
+  ChangePasswordPage,
+  EditProfilePage,
+  HomePage,
+  ProfilePage,
+  TohdosPage,
+} from "@/pages/shared";
+import RequireAuth from "@/routes/RequireAuth";
+import RequireGuest from "@/routes/RequireGuest";
 import "@/styles/App.css";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 const App: React.FC = () => {
   return (
     <Routes>
-      <Route>
-        <Route element={<HomePage />} index path="/" />
+      <Route path="/" element={<HomePage />} />
+
+      <Route element={<RequireGuest />}>
         <Route path="/auth">
-          <Route element={<LoginPage />} index path="sign-in/" />
-          <Route element={<RegisterPage />} path="sign-up/" />
+          <Route path="sign-in" element={<LoginPage />} />
+          <Route path="sign-up" element={<RegisterPage />} />
         </Route>
       </Route>
+
+      <Route element={<RequireAuth />}>
+        <Route path="/tohdos" element={<TohdosPage />} />
+        <Route path="/archive" element={<ArchivePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/profile/change-password"
+          element={<ChangePasswordPage />}
+        />
+        <Route path="/profile/edit" element={<EditProfilePage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

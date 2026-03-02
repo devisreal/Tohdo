@@ -9,18 +9,17 @@ import {
 import { NewTohdo, UpdateTohdo } from "@/types/tohdo";
 import { handleZodError } from "@/utils/handleZodError";
 import { tohdoInsertSchema, tohdoUpdateSchema } from "@/db/schema";
-import { JwtPayload } from "@/types/auth";
 
 export const getUserTohdosController: RequestHandler = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   try {
-    const userId = req.user.sub;
-    const data = await getUserTohdosService(userId);
+    const userId = Number(req.user.sub);
+    const groups = await getUserTohdosService(userId);
     res.json({
       status: ResponseStatus.Success,
-      groups: data,
+      groups,
     });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -41,7 +40,9 @@ export const createTohdoController: RequestHandler = async (
     const userId = Number(req.user.sub);
     const formValues: NewTohdo = { userId, ...req.body };
     const parsedValues = tohdoInsertSchema.parse(formValues);
+
     const group = await createTohdoService(parsedValues);
+
     res.status(201).json({
       status: ResponseStatus.Success,
       message: "Tohdo created successfully",
@@ -68,12 +69,12 @@ export const updateTohdoController: RequestHandler = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const user: JwtPayload = req.user;
+    const userId = Number(req.user.sub);
     const formValues: UpdateTohdo = req.body;
     const tohdoId = Number(req.params.tohdoId);
     const parsedValues: UpdateTohdo = tohdoUpdateSchema.parse(formValues);
 
-    const data = { userId: Number(user.sub), tohdoId, ...parsedValues };
+    const data = { userId, tohdoId, ...parsedValues };
     const tohdo = await updateTohdoService(data);
 
     res.status(200).json({
@@ -140,9 +141,9 @@ export const deleteTohdoContoller: RequestHandler = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const user: JwtPayload = req.user;
+    const userId = Number(req.user.sub);
     const tohdoId = Number(req.params.tohdoId);
-    const deletedTohdo = await deleteTohdoService(tohdoId, Number(user.sub));
+    const deletedTohdo = await deleteTohdoService(tohdoId, userId);
     res.status(204).json({
       status: ResponseStatus.Success,
       message: `Deleted tohdo '${deletedTohdo.title}'!`,
